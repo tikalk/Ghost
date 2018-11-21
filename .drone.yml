@@ -9,10 +9,23 @@ pipeline:
     # auto_tag: true
 
   helm_deploy:
-        image: quay.io/ipedrazas/drone-helm
-        skip_tls_verify: true
-        chart: ./helm/Chart.yaml
-        update_dependencies: true
-        values: image.tag=2.6.1.${DRONE_BUILD_NUMBER}
-        values_files: [helm/values.yaml]
-        namespace: default
+    image: quay.io/ipedrazas/drone-helm
+    secrets: [ api_server, kubernetes_token ]
+    skip_tls_verify: true
+    chart: ./helm/Chart.yaml
+    update_dependencies: true
+    values: image.tag=2.6.1.${DRONE_BUILD_NUMBER}
+    values_files: [helm/values.yaml]
+    namespace: default
+
+  # slack:
+  #   image: plugins/slack
+  #   webhook:
+  #     from_secret: slack_webhook
+  #   channel: dartagnan
+  #   template: >
+  #     {{#success build.status}}
+  #       build {{build.number}} succeeded. Good job.
+  #     {{else}}
+  #       build {{build.number}} failed. Fix me please.
+  #     {{/success}}
