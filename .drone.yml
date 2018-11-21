@@ -12,6 +12,7 @@ pipeline:
     image: quay.io/ipedrazas/drone-helm
     secrets: [ api_server, kubernetes_token ]
     skip_tls_verify: true
+    release: ${DRONE_BRANCH}
     chart: ./helm/Chart.yaml
     update_dependencies: true
     values: image.tag=2.6.1.${DRONE_BUILD_NUMBER}
