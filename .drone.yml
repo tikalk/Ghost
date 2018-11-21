@@ -12,6 +12,7 @@ pipeline:
         image: quay.io/ipedrazas/drone-helm
         skip_tls_verify: true
         chart: ./helm/Chart.yaml
+        update_dependencies: true
         values: image.tag=2.6.1.${DRONE_BUILD_NUMBER}
         values_files: [helm/values.yaml]
         namespace: default
