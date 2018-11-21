@@ -16,7 +16,6 @@ pipeline:
     update_dependencies: true
     values: image.tag=2.6.1.${DRONE_BUILD_NUMBER}
     values_files: [helm/values.yaml]
-    namespace: default
 
   # slack:
   #   image: plugins/slack
