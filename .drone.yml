@@ -1,0 +1,20 @@
+pipeline:
+  docker:
+    image: plugins/docker
+    secrets: [ docker_username, docker_password ]
+    repo: docker.dartagnan.devops.fuse.tikal.io/tikalk/ghost
+    registry: docker.dartagnan.devops.fuse.tikal.io
+    tags:
+      - 2.6.1.${DRONE_BUILD_NUMBER}
+    # auto_tag: true
+
+  helm_deploy:
+        image: quay.io/ipedrazas/drone-helm
+        skip_tls_verify: true
+        chart: ./helm/Chart.yaml
+        release: ${DRONE_BRANCH}
+        values: secret.password=${SECRET_PASSWORD},image.tag=${TAG}
+        prefix: STAGING
+        namespace: development
+
+    docker.dartagnan.devops.fuse.tikal.io/tikalk/ghost:2.6.1.${DRONE_BUILD_NUMBER}
