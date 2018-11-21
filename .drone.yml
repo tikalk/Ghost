@@ -11,8 +11,7 @@ pipeline:
   slack:
     image: plugins/slack
     secrets: [ slack_webhook ]
-    webhook:
-      from_secret: slack_webhook
+    webhook: slack_webhook
     channel: dartagnan
     template: >
       {{#success build.status}}
