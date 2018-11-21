@@ -8,18 +8,6 @@ pipeline:
       - 2.6.1.${DRONE_BUILD_NUMBER}
     # auto_tag: true
 
-  slack:
-    image: plugins/slack
-    secrets: [ slack_webhook ]
-    # webhook: https://hooks.slack.com/services/
-    channel: dartagnan
-    template: >
-      {{#success build.status}}
-        build {{build.number}} succeeded. Good job.
-      {{else}}
-        build {{build.number}} failed. Fix me please.
-      {{/success}}
-
   helm_deploy:
     image: quay.io/ipedrazas/drone-helm
     secrets: [ api_server, kubernetes_token ]
@@ -28,3 +16,14 @@ pipeline:
     update_dependencies: true
     values: image.tag=2.6.1.${DRONE_BUILD_NUMBER}
     values_files: [helm/values.yaml]
+
+  slack:
+    image: plugins/slack
+    secrets: [ slack_webhook ]
+    channel: dartagnan
+    template: >
+      {{#success build.status}}
+        build {{build.number}} that took {{since build.started}} has succeeded. Good job. Ghost version 2.6.1.{{build.number}} was deployed. See build details: {{ build.link }}
+      {{else}}
+        build {{build.number}} that took {{since build.started}} has failed. Fix me please. See build details: {{ build.link }}
+      {{/success}}
